@@ -10,7 +10,7 @@ export default {
         {
           id: 'c1',
           firstName: 'Max',
-          lastName: 'Schwarmuller',
+          lastName: 'Schwarzmuller',
           areas: ['frontend', 'backend', 'career'],
           description:
             'A subject matter expert in all things related to JavaScript',

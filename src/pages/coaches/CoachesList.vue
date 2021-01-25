@@ -2,26 +2,28 @@
   <section>
     FILTER
   </section>
-  <section>
-    <div class="controls">
-      <button>Refresh</button>
-      <router-link to="/register">Register a Coach</router-link>
-    </div>
-  </section>
-  <section>
-    <ul>
-      <coach-item
-        v-for="coach in filteredCoaches"
-        :key="coach.id"
-        :id="coach.id"
-        :firstName="coach.firstName"
-        :lastName="coach.lastName"
-        :rate="coach.hourlyRate"
-        :areas="coach.areas"
-      >
-      </coach-item>
-    </ul>
-  </section>
+  <base-card>
+    <section>
+      <div class="controls">
+        <base-button mode="outline">Refresh</base-button>
+        <base-button to="/register">Register a Coach</base-button>
+      </div>
+    </section>
+    <section>
+      <ul>
+        <coach-item
+          v-for="coach in filteredCoaches"
+          :key="coach.id"
+          :id="coach.id"
+          :firstName="coach.firstName"
+          :lastName="coach.lastName"
+          :rate="coach.hourlyRate"
+          :areas="coach.areas"
+        >
+        </coach-item>
+      </ul>
+    </section>
+  </base-card>
 </template>
 
 <script>
