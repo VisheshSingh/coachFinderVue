@@ -3,28 +3,26 @@
     <coach-filter @update-filter="updateFilter"></coach-filter>
   </section>
   <base-card>
-    <section>
-      <div class="controls">
-        <base-button mode="outline" @click="loadCoaches">Refresh</base-button>
-        <base-button v-if="!isCoach" link to="/register"
-          >Register a Coach</base-button
-        >
-      </div>
-    </section>
-    <section>
-      <ul>
-        <coach-item
-          v-for="coach in filteredCoaches"
-          :key="coach.id"
-          :id="coach.id"
-          :firstName="coach.firstName"
-          :lastName="coach.lastName"
-          :rate="coach.hourlyRate"
-          :areas="coach.areas"
-        >
-        </coach-item>
-      </ul>
-    </section>
+    <div class="controls">
+      <base-button mode="outline" @click="loadCoaches">Refresh</base-button>
+      <base-button v-if="!isCoach && !isLoading" link to="/register"
+        >Register a Coach</base-button
+      >
+    </div>
+    <div v-if="isLoading"><base-spinner></base-spinner></div>
+    <ul v-else-if="!isLoading && hasCoaches">
+      <coach-item
+        v-for="coach in filteredCoaches"
+        :key="coach.id"
+        :id="coach.id"
+        :firstName="coach.firstName"
+        :lastName="coach.lastName"
+        :rate="coach.hourlyRate"
+        :areas="coach.areas"
+      >
+      </coach-item>
+    </ul>
+    <h3 v-else>No coaches found.</h3>
   </base-card>
 </template>
 
@@ -37,6 +35,7 @@ export default {
   components: { CoachItem, CoachFilter },
   data() {
     return {
+      isLoading: false,
       activeFilters: {
         frontend: true,
         backend: true,
@@ -45,10 +44,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('coaches', ['isCoach']),
+    ...mapGetters('coaches', ['coaches', 'isCoach', 'hasCoaches']),
     filteredCoaches() {
-      const coaches = this.$store.getters['coaches/coaches'];
-      return coaches.filter(coach => {
+      return this.coaches.filter(coach => {
         if (this.activeFilters.frontend && coach.areas.includes('frontend')) {
           return true;
         }
@@ -63,7 +61,9 @@ export default {
     }
   },
   created() {
+    this.isLoading = true;
     this.loadCoaches();
+    this.isLoading = false;
   },
   methods: {
     ...mapActions('coaches', ['loadCoaches']),
