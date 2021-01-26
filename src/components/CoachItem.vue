@@ -14,7 +14,7 @@
       <base-button mode="outline" link :to="coachContactLink"
         >Contact</base-button
       >
-      <base-button :to="coachDetailLink">View Details</base-button>
+      <base-button link :to="coachDetailLink">View Details</base-button>
     </div>
   </li>
 </template>
