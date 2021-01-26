@@ -6,7 +6,9 @@
     <section>
       <div class="controls">
         <base-button mode="outline">Refresh</base-button>
-        <base-button to="/register">Register a Coach</base-button>
+        <base-button v-if="!isCoach" link to="/register"
+          >Register a Coach</base-button
+        >
       </div>
     </section>
     <section>
@@ -27,6 +29,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import CoachFilter from '../../components/CoachFilter';
 import CoachItem from '../../components/CoachItem';
 
@@ -42,6 +45,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('coaches', ['isCoach']),
     filteredCoaches() {
       const coaches = this.$store.getters['coaches/coaches'];
       return coaches.filter(coach => {
