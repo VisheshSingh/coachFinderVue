@@ -1,5 +1,5 @@
 export default {
-  addCoach({ commit, rootGetters }, coachData) {
+  async addCoach({ commit, rootGetters }, coachData) {
     const {
       firstName,
       lastName,
@@ -8,14 +8,49 @@ export default {
       description
     } = coachData;
 
+    const userId = rootGetters.getUserId;
     const coachObj = {
-      id: rootGetters.getUserId,
       firstName,
       lastName,
       description,
       areas,
       hourlyRate
     };
-    commit('ADD_COACH', coachObj);
+    const response = await fetch(
+      `https://vue-playlist-25566.firebaseio.com/coaches/${userId}.json`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(coachObj)
+      }
+    );
+
+    if (!response.ok) {
+      // error
+    }
+    commit('ADD_COACH', {
+      ...coachObj,
+      id: userId
+    });
+  },
+  async loadCoaches({ commit }) {
+    const response = await fetch(
+      `https://vue-playlist-25566.firebaseio.com/coaches.json`
+    );
+    const data = await response.json();
+
+    const coaches = [];
+
+    for (let key in data) {
+      const coach = {
+        id: key,
+        firstName: data[key].firstName,
+        lastName: data[key].lastName,
+        description: data[key].description,
+        areas: data[key].areas,
+        hourlyRate: data[key].hourlyRate
+      };
+      coaches.push(coach);
+    }
+    commit('LOAD_COACHES', coaches);
   }
 };
