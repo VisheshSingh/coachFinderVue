@@ -4,6 +4,7 @@ import CoachDetails from './pages/coaches/CoachDetails';
 import CoachRegistration from './pages/coaches/CoachRegistration';
 import ContactCoach from './pages/requests/ContactCoach';
 import RequestsReceived from './pages/requests/RequestsReceived';
+import UserAuth from './pages/auth/UserAuth';
 import NotFound from './pages/NotFound';
 
 const router = createRouter({
@@ -20,6 +21,7 @@ const router = createRouter({
       ]
     },
     { path: '/register', component: CoachRegistration },
+    { path: '/auth', component: UserAuth },
     { path: '/requests', component: RequestsReceived },
     { path: '/:notFound(.*)', component: NotFound }
   ]
