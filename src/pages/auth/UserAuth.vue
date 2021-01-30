@@ -63,7 +63,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('auth', ['signup']),
+    ...mapActions('auth', ['signup', 'login']),
     switchMode() {
       if (this.mode === 'login') {
         this.mode = 'signup';
@@ -80,14 +80,16 @@ export default {
       // http requests...
       this.isLoading = true;
 
+      const actionPayload = {
+        email: this.email,
+        password: this.password
+      };
+
       try {
         if (this.mode === 'login') {
-          // login..
+          await this.login(actionPayload);
         } else {
-          await this.signup({
-            email: this.email,
-            password: this.password
-          });
+          await this.signup(actionPayload);
         }
       } catch (error) {
         console.log(error);
