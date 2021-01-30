@@ -9,7 +9,11 @@
     <base-card>
       <div class="controls">
         <base-button mode="outline" @click="loadCoaches">Refresh</base-button>
-        <base-button v-if="!isCoach && !isLoading" link to="/register"
+        <base-button link to="/auth" v-if="!isLoggedIn">Login</base-button>
+        <base-button
+          v-if="isLoggedIn && !isCoach && !isLoading"
+          link
+          to="/register"
           >Register a Coach</base-button
         >
       </div>
@@ -51,6 +55,10 @@ export default {
   },
   computed: {
     ...mapGetters('coaches', ['coaches', 'isCoach', 'hasCoaches']),
+    ...mapGetters('auth', ['isAuthenticated']),
+    isLoggedIn() {
+      return this.isAuthenticated;
+    },
     filteredCoaches() {
       return this.coaches.filter(coach => {
         if (this.activeFilters.frontend && coach.areas.includes('frontend')) {
