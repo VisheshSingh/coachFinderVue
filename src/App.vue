@@ -10,7 +10,10 @@
 <script>
 import TheHeader from './components/layout/TheHeader';
 export default {
-  components: { TheHeader }
+  components: { TheHeader },
+  created() {
+    this.$store.dispatch('auth/tryLogin');
+  }
 };
 </script>
 
