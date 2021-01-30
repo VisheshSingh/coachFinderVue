@@ -54,5 +54,12 @@ export default {
       userId: resData.localId,
       expiresIn: resData.expiresIn
     });
+  },
+  logout({ commit }) {
+    commit('SET_USER', {
+      token: null,
+      userId: null,
+      expiresIn: null
+    });
   }
 };
