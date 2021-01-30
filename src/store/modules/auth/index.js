@@ -6,7 +6,9 @@ export default {
   namespaced: true,
   state() {
     return {
-      user: null
+      userId: null,
+      token: null,
+      expiresIn: null
     };
   },
   getters,

@@ -1,35 +1,49 @@
 <template>
-  <base-card>
-    <form @submit.prevent="handleSubmit">
-      <div class="form-control">
-        <label for="email">Email</label>
-        <input type="email" id="email" v-model.trim="email" />
-      </div>
-      <div class="form-control">
-        <label for="password">Password</label>
-        <input type="password" id="password" v-model.trim="password" />
-      </div>
-      <p v-if="!formIsValid" class="errors">
-        Please enter valid email and password (must be at least 6 characters)
-      </p>
-      <div class="actions">
-        <base-button>{{ buttonCaption }}</base-button>
-        <base-button mode="flat" @click="switchMode">{{
-          switchAuthModeCaption
-        }}</base-button>
-      </div>
-    </form>
-  </base-card>
+  <div>
+    <base-dialog
+      :show="!!error"
+      title="An error occured"
+      @close="error = null"
+      >{{ error }}</base-dialog
+    >
+    <base-dialog :show="isLoading" title="Authenticating..." fixed>
+      <base-spinner></base-spinner>
+    </base-dialog>
+    <base-card>
+      <form @submit.prevent="handleSubmit">
+        <div class="form-control">
+          <label for="email">Email</label>
+          <input type="email" id="email" v-model.trim="email" />
+        </div>
+        <div class="form-control">
+          <label for="password">Password</label>
+          <input type="password" id="password" v-model.trim="password" />
+        </div>
+        <p v-if="!formIsValid" class="errors">
+          Please enter valid email and password (must be at least 6 characters)
+        </p>
+        <div class="actions">
+          <base-button>{{ buttonCaption }}</base-button>
+          <base-button mode="flat" @click.prevent="switchMode">{{
+            switchAuthModeCaption
+          }}</base-button>
+        </div>
+      </form>
+    </base-card>
+  </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
       email: '',
       password: '',
       mode: 'login',
-      formIsValid: true
+      formIsValid: true,
+      isLoading: false,
+      error: null
     };
   },
   computed: {
@@ -49,6 +63,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('auth', ['signup']),
     switchMode() {
       if (this.mode === 'login') {
         this.mode = 'signup';
@@ -56,12 +71,30 @@ export default {
         this.mode = 'login';
       }
     },
-    handleSubmit() {
+    async handleSubmit() {
       this.formIsValid = true;
       if (this.email === '' || this.password.length < 6) {
         this.formIsValid = false;
         return;
       }
+      // http requests...
+      this.isLoading = true;
+
+      try {
+        if (this.mode === 'login') {
+          // login..
+        } else {
+          await this.signup({
+            email: this.email,
+            password: this.password
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        this.error = error.message || 'Failed to authenticate';
+      }
+
+      this.isLoading = false;
     }
   }
 };
@@ -104,6 +137,7 @@ textarea:focus {
 }
 
 .actions {
-  text-align: center;
+  margin-top: 16px;
+  text-align: left;
 }
 </style>
