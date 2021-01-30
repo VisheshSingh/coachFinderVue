@@ -8,7 +8,8 @@ export default {
       description
     } = coachData;
 
-    const userId = rootGetters.getUserId;
+    const userId = rootGetters['auth/userId'];
+    console.log('userId: ', userId);
     const coachObj = {
       firstName,
       lastName,
@@ -16,8 +17,11 @@ export default {
       areas,
       hourlyRate
     };
+
+    const token = rootGetters['auth/token'];
+
     const response = await fetch(
-      `https://vue-playlist-25566.firebaseio.com/coaches/${userId}.json`,
+      `https://vue-playlist-25566.firebaseio.com/coaches/${userId}.json?auth=${token}`,
       {
         method: 'PUT',
         body: JSON.stringify(coachObj)
@@ -32,7 +36,7 @@ export default {
       id: userId
     });
   },
-  async loadCoaches({ commit }) {
+  async loadCoaches({ commit, rootGetters }) {
     const response = await fetch(
       `https://vue-playlist-25566.firebaseio.com/coaches.json`
     );
@@ -45,6 +49,9 @@ export default {
 
     const coaches = [];
 
+    const token = rootGetters['auth/token'];
+    const userId = rootGetters['auth/userId'];
+    console.log({ token, userId });
     for (let key in data) {
       const coach = {
         id: key,

@@ -25,8 +25,9 @@ export default {
   },
   async fetchRequests({ commit, rootGetters }) {
     const coachId = rootGetters.getUserId;
+    const token = rootGetters['auth/token'];
     const res = await fetch(
-      `https://vue-playlist-25566.firebaseio.com/requests/${coachId}.json`
+      `https://vue-playlist-25566.firebaseio.com/requests/${coachId}.json?auth=${token}`
     );
     const resData = await res.json();
     console.log({ resData });

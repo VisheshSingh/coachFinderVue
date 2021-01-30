@@ -23,8 +23,8 @@ export default {
 
     commit('SET_USER', {
       token: resData.idToken,
-      userId: res.localId,
-      expiresIn: res.expiresIn
+      userId: resData.localId,
+      expiresIn: resData.expiresIn
     });
   },
   async login({ commit }, payload) {
@@ -51,8 +51,8 @@ export default {
 
     commit('SET_USER', {
       token: resData.idToken,
-      userId: res.localId,
-      expiresIn: res.expiresIn
+      userId: resData.localId,
+      expiresIn: resData.expiresIn
     });
   }
 };
